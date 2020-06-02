@@ -2270,6 +2270,12 @@ export type SiteGroupConnection = {
   fieldValue?: Maybe<Scalars['String']>;
 };
 
+export type SiteMetadata = {
+  author: Scalars['String'];
+  description: Scalars['String'];
+  title: Scalars['String'];
+};
+
 export type SitePage = Node & {
   path: Scalars['String'];
   component: Scalars['String'];
@@ -2869,10 +2875,10 @@ export type SiteTitleQueryQueryVariables = {};
 
 export type SiteTitleQueryQuery = { site?: Maybe<{ siteMetadata?: Maybe<Pick<SiteSiteMetadata, 'title'>> }> };
 
-export type Unnamed_2_QueryVariables = {};
+export type SiteMetaQueryVariables = {};
 
 
-export type Unnamed_2_Query = { site?: Maybe<{ siteMetadata?: Maybe<Pick<SiteSiteMetadata, 'title' | 'description' | 'author'>> }> };
+export type SiteMetaQuery = { site: Maybe<{ siteMetadata?: Maybe<Pick<SiteSiteMetadata, 'title' | 'description' | 'author'>> }> };
 
 export type PostQueryVariables = {
   relativePath: Scalars['String'];

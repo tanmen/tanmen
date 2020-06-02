@@ -36,3 +36,15 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     })
   })
 }
+
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions
+  const typeDefs = `
+    type SiteSiteMetadata {
+      author: String!
+      description: String!
+      title: String!
+    }
+  `
+  createTypes(typeDefs)
+}
