@@ -20,7 +20,7 @@ describe("useType", () => {
     expect(result.current).toHaveProperty("finished", true)
   })
 
-  it("should be type", () => {
+  it("should be wait to type", () => {
     const delay = 100
     const { result } = renderHook(() => useType("test", true, delay))
 

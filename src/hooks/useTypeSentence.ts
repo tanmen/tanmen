@@ -14,7 +14,10 @@ export const useTypeSentence = (sentence: string[], delay: number = 50) => {
     if (finishCount === 0) return
     const current = count + 1
     setCount(current)
-    setTimeout(() => types[current]?.start(), 1000)
+    const handler = setTimeout(() => types[current]?.start(), 1000)
+    return () => {
+      clearTimeout(handler)
+    }
   },[finishCount])
 
   return {

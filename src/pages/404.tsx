@@ -1,6 +1,8 @@
-import React from "react"
+import React from "react";
+import { NotFoundTemplate } from "../components/templates/NotFoundTemplates";
+import SEO from "../metas/seo";
 
-export default () =>
-  <div>
-    Not Found
-  </div>
+export default () => <>
+  <SEO title="Not Found"/>
+  <NotFoundTemplate/>
+</>;

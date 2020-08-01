@@ -1,0 +1,39 @@
+.gatsby-code-title {
+    display: inline;
+    position: relative;
+    top: .7rem;
+    padding: .125rem .5rem;
+    background-color: #535353;
+    border-radius: .25rem;
+}
+
+.gatsby-code-title + .gatsby-highlight {
+    margin-top: -1.25rem;
+}
+
+.gatsby-code-title + .gatsby-highlight > pre {
+    padding-top: 20px;
+}
+
+.markdown-body {
+    color: whitesmoke;
+}
+
+.markdown-body h1,
+.markdown-body h2 {
+    border-bottom-color: #343a40;
+}
+
+.markdown-body ul {
+    list-style: circle;
+}
+
+.markdown-body li > p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.markdown-body li > p + p {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
