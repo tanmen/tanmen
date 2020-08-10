@@ -10,7 +10,9 @@ export const IndexTemplate: FC = () => {
     "Hi people :)",
     "Welcome to a certain lazy programmer's site X)"
   ]);
-  const viewed = Boolean(localStorage.getItem("INDEX_VIEWED"));
+  const viewed = typeof localStorage !== 'undefined'
+    ? Boolean(localStorage.getItem("INDEX_VIEWED"))
+    : true;
   const [scene, setScene] = useState<number>(viewed ? 1 : 0);
 
   useEffect(() => {
