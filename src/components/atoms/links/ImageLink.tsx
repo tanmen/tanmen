@@ -31,7 +31,12 @@ export const ImageLink: FC<Props> = ({ to, images, alt, styles, direction }) => 
     onMouseEnter={() => setActive(true)}
     onMouseLeave={() => setActive(false)}>
     <GatsbyImage
-      fixed={active ? images.active : images.normal}
+      style={active ? ({ display: "block" }) : ({ display: "none" })}
+      fixed={images.active}
+      alt={alt}/>
+    <GatsbyImage
+      style={active  ? ({display: 'none'}) : ({display: 'block'})}
+      fixed={images.normal}
       alt={alt}/>
   </SLink>;
 };
