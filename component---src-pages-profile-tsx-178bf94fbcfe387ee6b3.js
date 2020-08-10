@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{huF4:function(n,t,e){"use strict";e.r(t);var c=e("q1tI"),u=e.n(c),b=e("47i6"),i=e("lGJ9"),l=e("qKvR"),r=function(){return Object(l.b)(b.c,{direction:"up"},Object(l.b)(i.a,null))},o=e("sOyx");t.default=function(){return Object(l.b)(u.a.Fragment,null,Object(l.b)(o.a,{title:"Profile"}),Object(l.b)(r,null))}}}]);
+//# sourceMappingURL=component---src-pages-profile-tsx-178bf94fbcfe387ee6b3.js.map
