@@ -7,7 +7,7 @@ export const useTypeSentence = (sentence: string[], delay: number = 50) => {
   const [count, setCount] = useState(0)
 
   useMount(() => {
-    types[0]?.start()
+    types[0]?.start();
   })
   const finishCount = types.filter(type => type.finished).length
   useEffect(() => {

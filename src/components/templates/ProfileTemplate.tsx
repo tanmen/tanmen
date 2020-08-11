@@ -1,6 +1,5 @@
 import React, { FC } from "react";
-import { Header, Layout } from "../molecules";
-import { Footer } from "../molecules/Footer";
+import { Layout } from "../molecules";
 import { ComingSoon } from "../organisms";
 
 export const ProfileTemplate: FC = () =>

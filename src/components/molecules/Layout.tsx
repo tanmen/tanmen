@@ -1,19 +1,20 @@
 import styled from "@emotion/styled";
 import React, { FC } from "react";
+import { DesignProps } from "../../../types/props";
 import { Backboard } from "../atoms";
-import { Footer, height as FHeight, marginTop } from "./Footer";
-import { Header, Props, height as HHeight } from "./Header";
+import { Footer, FooterStyle } from "./Footer";
+import { Header, HeaderProps, HeaderStyle } from "./Header";
 
-export const Layout: FC<Props & { className?: string }> =
+export const Layout: FC<HeaderProps & DesignProps> =
   ({ direction, children, className }) =>
     <Backboard className={className}>
       <Header direction={direction}/>
-      <Content>
+      <StyledContent>
         {children}
-      </Content>
+      </StyledContent>
       <Footer/>
     </Backboard>;
 
-const Content = styled.div`
-min-height: calc(100vh - ${HHeight} - ${FHeight} - ${marginTop});
+export const StyledContent = styled.div`
+min-height: calc(100vh - ${HeaderStyle.height} - ${FooterStyle.height} - ${FooterStyle.marginTop});
 `;

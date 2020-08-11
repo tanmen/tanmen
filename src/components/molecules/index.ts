@@ -1,5 +1,6 @@
 export * from './DateCount'
 export * from './DateCountList'
+export * from './Footer'
 export * from './Header'
 export * from './Jumbotron'
 export * from './Layout'

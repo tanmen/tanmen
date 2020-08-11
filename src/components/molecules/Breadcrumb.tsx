@@ -3,17 +3,17 @@ import React, { FC } from "react";
 import { animated, useTransition } from "react-spring";
 import { ActiveLink } from "../atoms/links";
 
-type Item = {
+type Link = {
   name: string
   path: string
 }
 
 type Props = {
-  items: Item[]
+  items: Link[]
 }
 
 export const Breadcrumb: FC<Props> = ({ items }) => {
-  const transitions = useTransition(items, (item: Item) => item.path, {
+  const transitions = useTransition(items, (item: Link) => item.path, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 }

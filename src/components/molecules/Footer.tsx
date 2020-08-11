@@ -6,15 +6,18 @@ export const Footer: FC = () =>
     © Tanmen
   </Box>;
 
-export const height = '50px';
-export const marginTop = '1rem';
+
+export const FooterStyle = {
+  height: "50px",
+  marginTop: "1rem"
+};
 
 const Box = styled.footer`
 display: flex;
 justify-content: center;
 box-sizing: border-box;
-height: ${height};
+height: ${FooterStyle.height};
 border-top: 1px solid #343a40;
 padding: 1rem;
-margin-top: ${marginTop};
+margin-top: ${FooterStyle.marginTop};
 `;

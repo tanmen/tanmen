@@ -1,79 +1,54 @@
-import { keyframes } from "@emotion/core";
 import styled from "@emotion/styled";
-import React, { FC, useEffect, useState } from "react";
-import { useTypeSentence } from "../../hooks/useTypeSentence";
+import { easeCubicInOut } from "d3-ease";
+import React, { FC, useEffect, useMemo, useState } from "react";
+import { animated, useTransition } from "react-spring";
+import { useOnlyFirst } from "../../hooks/useOnlyFirst";
 import { Backboard } from "../atoms";
-import { Room } from "../organisms";
+import { Room } from "../organisms/room";
+import { TypeScene } from "../organisms/TypeScene";
 
 export const IndexTemplate: FC = () => {
-  const { sentence, finished } = useTypeSentence([
-    "Hi people :)",
-    "Welcome to a certain lazy programmer's site X)"
-  ]);
-  const viewed = typeof localStorage !== 'undefined'
-    ? Boolean(localStorage.getItem("INDEX_VIEWED"))
-    : true;
-  const [scene, setScene] = useState<number>(viewed ? 1 : 0);
+  const { visit, visited } = useOnlyFirst("INDEX_VIEWED");
+  const [scene, setScene] = useState<number>(visited ? 1 : 0);
+  const [handler, setHandler] = useState<NodeJS.Timer | null>(null);
 
   useEffect(() => {
-    if (scene === 0 && finished) {
-      const sceneHandler = setTimeout(() => {
-        setScene(scene + 1);
-      }, 1500);
-      const viewedHandler = setTimeout(() => {
-        localStorage.setItem("INDEX_VIEWED", "true");
-      }, 1500);
-      return () => {
-        clearTimeout(sceneHandler);
-        clearTimeout(viewedHandler);
-      };
-    }
-    return () => {};
-  }, [finished, scene]);
+    return () => {handler && clearTimeout(handler);};
+  }, [handler]);
+
+  const transitions = useTransition(scene, null, {
+    initial: { transform: "translateX(0vw)" },
+    from: { transform: "translateX(150vw)" },
+    enter: { transform: "translateX(0vw)" },
+    leave: { transform: "translateX(-150vw)" },
+    config: { duration: 1500, easing: easeCubicInOut }
+  });
+
+  const sentence = useMemo(() => [
+    "Hi people :)",
+    "Welcome to a certain lazy programmer's site X)"
+  ], []);
 
   return <Backboard>
-    <Container center={scene === 0}>
-      {
-        scene === 0
-          ? <TextBox finished={finished}>
-            {sentence.map((text, index) => <Text key={index}>{text}</Text>)}
-          </TextBox>
-          : <Room animate={!viewed}/>
-      }
-    </Container>
+    {transitions.map(({ item, key, props }) =>
+      item === 0 ?
+        <AnimatedBox key={key} style={props}>
+          <TypeScene sentence={sentence} onFinish={() => {
+            const timeout = setTimeout(() => {
+              visit();
+              setScene(1);
+            }, 500);
+            setHandler(timeout);
+          }}/>
+        </AnimatedBox> :
+        <AnimatedBox key={key} style={props}>
+          <Room/>
+        </AnimatedBox>)}
   </Backboard>;
 };
 
-const Container = styled.div<{ center: boolean }>(({ center }) => ({
-  height: "100vh",
-  overflow: "hidden",
-  display: "flex",
-  alignItems: "center",
-  flexDirection: "column",
-  justifyContent: center ? "center" : "start",
-  fontSize: "calc(10px + 2vmin)"
-}));
 
-const TextBox = styled.div<{ finished: boolean }>(({ finished }) => ({
-  textAlign: "center",
-  animation: finished ? `${animation} 2s forwards` : "unset"
-}));
-
-const animation = keyframes`
-0% {
-  transform: translateX(0);
-}
-
-30% {
-  transform: translateX(0);
-}
-
-100% {
- transform: translateX(-100vw);
-}
-`;
-
-const Text = styled.p`
-margin: 0.2em;
-font-size: 1.5em;
-`;
+const AnimatedBox = animated(styled.div`
+position: fixed;
+width: 100vw;
+`);

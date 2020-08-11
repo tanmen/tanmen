@@ -6,8 +6,8 @@ import { DeepNonNullable } from "utility-types";
 import { HeaderQuery } from "../../../types/gatsby-graphql";
 import { SwipeLink } from "../atoms/links";
 
-export type Props = { direction: "left" | "right" | "up" | "down" };
-export const Header: FC<Props> = ({ direction }) => {
+export type HeaderProps = { direction: "left" | "right" | "up" | "down" };
+export const Header: FC<HeaderProps> = ({ direction }) => {
   const { file: { childImageSharp: { fixed } } } = useStaticQuery<DeepNonNullable<HeaderQuery>>(graphql`query Header {
     file(relativePath: {eq: "logo.png"}) {
       childImageSharp {
@@ -34,13 +34,15 @@ export const Header: FC<Props> = ({ direction }) => {
   </Box>;
 };
 
-export const height = '50px';
+export const HeaderStyle = {
+  height: '50px'
+}
 
 const Box = styled.header`
 display: flex;
 align-items: center;
 box-sizing: border-box;
-height: ${height};
+height: ${HeaderStyle.height};
 padding: 5px 10px;
 box-shadow: 0 5px 10px rgba(0,0,0,0.2);
 `;
