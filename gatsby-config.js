@@ -59,5 +59,11 @@ module.exports = {
         trackingId: process.env.GOOGLE_TRACKING_ID,
       },
     },
+    {
+      resolve: `gatsby-plugin-google-adsense`,
+      options: {
+        publisherId: process.env.GOOGLE_ADSENSE_ID,
+      },
+    },
   ]
 };
