@@ -37,7 +37,7 @@ const query = graphql`query RoomImg {
 }`;
 
 const StyledStretch = styled(Stretch)`
-align-items: start;
+align-items: flex-start;
 `;
 
 const Box = styled.div`
