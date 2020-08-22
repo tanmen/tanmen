@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
+      - uses: kamiazya/setup-graphviz@v1
       - run: yarn
       - run: yarn test
       - run: yarn build

@@ -3,14 +3,14 @@ const path = require("path");
 
 module.exports = {
   siteMetadata: {
-    title: 'Tanmen',
+    title: "Tanmen",
     description:
       "怠惰なプログラマーのサイト",
-    author: 'tanmen',
+    author: "tanmen",
     social: {
-      github: 'tanmen',
-      twitter: 'dot_tanmen',
-      qiita: 'dot_tanmen'
+      github: "tanmen",
+      twitter: "dot_tanmen",
+      qiita: "dot_tanmen"
     }
   },
   plugins: [
@@ -37,7 +37,10 @@ module.exports = {
       options: {
         plugins: [
           {
-            resolve: "gatsby-remark-code-titles"
+            resolve: `gatsby-remark-code-titles`
+          },
+          {
+            resolve: `gatsby-remark-plantuml`
           },
           {
             resolve: `gatsby-remark-prismjs`
@@ -56,14 +59,14 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: process.env.GOOGLE_TRACKING_ID,
-      },
+        trackingId: process.env.GOOGLE_TRACKING_ID
+      }
     },
     {
       resolve: `gatsby-plugin-google-adsense`,
       options: {
-        publisherId: process.env.GOOGLE_ADSENSE_ID,
-      },
-    },
+        publisherId: process.env.GOOGLE_ADSENSE_ID
+      }
+    }
   ]
 };
