@@ -67,6 +67,7 @@ module.exports = {
       options: {
         publisherId: process.env.GOOGLE_ADSENSE_ID
       }
-    }
+    },
+    `gatsby-plugin-offline`
   ]
 };
