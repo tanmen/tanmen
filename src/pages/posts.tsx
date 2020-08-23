@@ -2,9 +2,11 @@ import compareDesc from "date-fns/compareDesc";
 import { graphql } from "gatsby";
 import React, { FC } from "react";
 import { DeepNonNullable } from "utility-types";
-import { PostPickFragment, PostsQuery } from "../../types/gatsby-graphql";
+import { PostsQuery } from "../../types/gatsby-graphql";
 import { PostsTemplate } from "../components/templates/PostsTemplate";
 import SEO from "../metas/seo";
+import { postPickCountDescOrder } from "../utils/comparetors";
+import { convertPostPick } from "../utils/converters";
 
 const Posts: FC<{ data: DeepNonNullable<PostsQuery> }> = ({ data: { posts: { edges }, data: { tags, dates } } }) =>
   <>
@@ -14,7 +16,7 @@ const Posts: FC<{ data: DeepNonNullable<PostsQuery> }> = ({ data: { posts: { edg
       tags={tags.map(
         ({ fieldValue: name, totalCount: count, edges }) =>
           ({ name, count, posts: edges.map(convertPostPick) }))
-        .sort(compare)}
+        .sort(postPickCountDescOrder)}
       dates={dates.map(
         ({ fieldValue: name, totalCount: count, edges }) =>
           ({ name, count, posts: edges.map(convertPostPick) }))
@@ -46,15 +48,3 @@ export const query = graphql`query Posts {
     }
   }
 }`;
-
-const convertPostPick = ({ node: { headings: [{ value }], excerpt, frontmatter: { createdAt, tags } } }: DeepNonNullable<PostPickFragment>) =>
-  ({ title: value, createdAt: new Date(createdAt), excerpt, tags });
-
-const compare = (a: PostCount, b: PostCount) => {
-  if (a.count < b.count) {
-    return 1;
-  } else if (a.count > b.count) {
-    return -1;
-  }
-  return 0;
-};

@@ -2,9 +2,11 @@ import compareDesc from "date-fns/compareDesc";
 import { graphql } from "gatsby";
 import React, { FC } from "react";
 import { DeepNonNullable } from "utility-types";
-import { PostPickFragment, PostQuery } from "../../types/gatsby-graphql";
+import { PostQuery } from "../../types/gatsby-graphql";
 import { PostTemplate } from "../components/templates/PostTemplate";
 import SEO from "../metas/seo";
+import { postPickCountDescOrder } from "../utils/comparetors";
+import { convertPostPick } from "../utils/converters";
 
 const Post: FC<{ data: DeepNonNullable<PostQuery>, pageContext: { title: string } }> = ({ data: { markdownRemark: { html }, allMarkdownRemark: { dates, tags } }, pageContext: { title } }) =>
   <>
@@ -15,7 +17,7 @@ const Post: FC<{ data: DeepNonNullable<PostQuery>, pageContext: { title: string 
       tags={tags.map(
         ({ fieldValue: name, totalCount: count, edges }) =>
           ({ name, count, posts: edges.map(convertPostPick) }))
-        .sort(compare)}
+        .sort(postPickCountDescOrder)}
       dates={dates.map(
         ({ fieldValue: name, totalCount: count, edges }) =>
           ({ name, count, posts: edges.map(convertPostPick) }))
@@ -25,7 +27,7 @@ const Post: FC<{ data: DeepNonNullable<PostQuery>, pageContext: { title: string 
 export default Post;
 
 export const query = graphql`query Post($title: String) {
-  markdownRemark(headings: {elemMatch: {depth: {eq: 1}, value: {eq: $title}}}) {
+  markdownRemark(frontmatter: {title: {eq: $title}}) {
     html
   }
   allMarkdownRemark {
@@ -45,15 +47,3 @@ export const query = graphql`query Post($title: String) {
     }
   }
 }`;
-
-const convertPostPick = ({ node: { headings: [{ value }], excerpt, frontmatter: { createdAt, tags } } }: DeepNonNullable<PostPickFragment>) =>
-  ({ title: value, createdAt: new Date(createdAt), excerpt, tags });
-
-const compare = (a: PostCount, b: PostCount) => {
-  if (a.count < b.count) {
-    return 1;
-  } else if (a.count > b.count) {
-    return -1;
-  }
-  return 0;
-};

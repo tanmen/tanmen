@@ -38,20 +38,18 @@ const postCreate = async (graphql, actions) => {
       allMarkdownRemark {
         edges {
           node {
-            headings {
-              depth
-              value
+            frontmatter {
+              title
             }
           }
         }
       }
     }`);
-  data.allMarkdownRemark.edges.forEach(({node: {headings}}) => {
-    const heading = headings.find(({depth}) => depth === 1);
-    heading && actions.createPage({
-      path: `posts/${heading.value}`,
+  data.allMarkdownRemark.edges.forEach(({node: {frontmatter: {title}}}) => {
+    actions.createPage({
+      path: `posts/${title}`,
       component: require.resolve(`./src/templates/post.tsx`),
-      context: { title: heading.value }
+      context: { title }
     })
   })
 };

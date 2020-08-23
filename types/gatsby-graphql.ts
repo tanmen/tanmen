@@ -2931,7 +2931,7 @@ export type ToolboxImgQuery = { normal?: Maybe<{ childImageSharp?: Maybe<{ fixed
 
 export type PostPickFragment = { node: (
     Pick<MarkdownRemark, 'excerpt'>
-    & { headings?: Maybe<Array<Maybe<Pick<MarkdownHeading, 'value' | 'depth'>>>>, frontmatter?: Maybe<Pick<MarkdownRemarkFrontmatter, 'createdAt' | 'tags'>> }
+    & { frontmatter?: Maybe<Pick<MarkdownRemarkFrontmatter, 'title' | 'createdAt' | 'tags'>> }
   ) };
 
 export type SiteMetaQueryVariables = Exact<{ [key: string]: never; }>;

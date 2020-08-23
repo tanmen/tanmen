@@ -1,10 +1,10 @@
 ---
-createdMonthAt: "2020-08"
-createdAt: "2020-08-17"
-updatedAt: "2020-08-23"
+title: Openapiファイルをディレクトリ構造で管理する
+createdMonthAt: 2020-08
+createdAt: 2020-08-17
+updatedAt: 2020-08-23
 tags: [Node, Openapi, Tool]
 ---
-# Openapiファイルをディレクトリ構造で管理する
 Openapiは便利ですよね。
 
 Openapiファイルがあれば、Client生成できますし、Mockサーバも作成でき、サーバ同士の通信でも使えますし、どんなデータを許容するのかもわかります。(きちんと書いていればですが..)
