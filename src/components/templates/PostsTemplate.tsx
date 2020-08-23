@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 import React, { FC, useMemo } from "react";
-import { DateCountList, Header, Jumbotron, Layout, PostCardList, Side, TagCountList } from "../molecules";
+import { DateCountList, Jumbotron, Layout, PostCardList, Side, TagCountList } from "../molecules";
 import { Breadcrumb } from "../molecules/Breadcrumb";
-import { Footer } from "../molecules/Footer";
 
 type Props = {
   posts: PostPick[]

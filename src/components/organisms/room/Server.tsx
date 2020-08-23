@@ -1,4 +1,4 @@
-import { css } from "@emotion/core";
+import { css, keyframes } from "@emotion/core";
 import { graphql, StaticQuery } from "gatsby";
 import React, { FC } from "react";
 import { DeepNonNullable } from "utility-types";
@@ -13,23 +13,50 @@ export const Server: FC = () => {
                active: { childImageSharp: { fixed: active } }
              }: DeepNonNullable<ServerImgQuery>) =>
       <ImageLink
+        name="Services"
         to="/services"
         images={{
           normal,
           active
         }}
-        alt="desk"
+        alt="services"
         direction="left"
-        styles={Style}/>}
+        styles={style}
+        nameStyles={nameStyles}/>}
   />;
 };
 
-const Style = css`
+const anime = keyframes`
+from {
+  top: 40px;
+  opacity: 0;
+}
+
+to {
+  top: 50px;
+  opacity: 1;
+}
+`;
+
+const nameStyles = css`
+position: absolute;
+width: inherit;
+font-size: .8em;
+top: 50px;
+left: 25px;
+color: #b3b3b3;
+text-decoration: none;
+transform: rotate(30deg) skewX(30deg);
+animation: ${anime} 200ms;
+z-index: 3;
+`;
+
+const style = css`
 position: absolute;
 bottom: 222px;
 right: 61px;
 z-index: 2;
-`
+`;
 
 const query = graphql`query ServerImg {
   normal: file(relativePath: {eq: "server_normal.png"}) {

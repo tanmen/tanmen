@@ -59,4 +59,4 @@ padding: .25rem;
 const Preview = styled.div`
 border-top: 1px solid #282d34;
 padding: 1rem .5rem .5rem;
-`
+`;

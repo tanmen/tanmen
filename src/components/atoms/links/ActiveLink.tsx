@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import React, { FC } from "react";
 import { Link as GatsbyLink } from "gatsby";
+import React, { FC } from "react";
 
 export const ActiveLink: FC<{ to: string, className?: string }> = ({ to, className, children }) =>
   <SLink to={to} className={className}>{children}</SLink>;

@@ -1,4 +1,4 @@
-import { css } from "@emotion/core";
+import { css, keyframes } from "@emotion/core";
 import { graphql, StaticQuery } from "gatsby";
 import React, { FC } from "react";
 import { DeepNonNullable } from "utility-types";
@@ -13,18 +13,44 @@ export const Mail: FC = () => {
                active: { childImageSharp: { fixed: active } }
              }: DeepNonNullable<MailImgQuery>) =>
       <ImageLink
+        name="Contact"
         to="/contact"
         images={{
           normal,
           active
         }}
-        alt="desk"
+        alt="mail"
         direction="up"
-        styles={Style}/>}
+        styles={styles}
+        nameStyles={nameStyles}/>}
   />;
 };
 
-const Style = {
+const anime = keyframes`
+from {
+  top: -45px;
+  opacity: 0;
+}
+
+to {
+  top: -35px;
+  opacity: 1;
+}
+`;
+
+const nameStyles = css`
+position: absolute;
+width: inherit;
+font-size: .8em;
+top: -35px;
+left: 18px;
+color: #b3b3b3;
+text-decoration: none;
+transform: rotate(30deg) skewX(30deg);
+animation: ${anime} 200ms;
+`;
+
+const styles = {
   normal: css`
     position: absolute;
     bottom: 596px;
@@ -37,7 +63,7 @@ const Style = {
     right: 91px;
     z-index: 2;
   `
-}
+};
 
 const query = graphql`query MailImg {
   normal: file(relativePath: {eq: "mail_normal.png"}) {

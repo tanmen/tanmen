@@ -24,8 +24,8 @@ export const Breadcrumb: FC<Props> = ({ items }) => {
         ? <React.Fragment key={key}><Item><ActiveLink
           to={item.path}>{item.name}</ActiveLink></Item><span>/</span></React.Fragment>
         : items.length === 1
-          ? <Item key={key}>{item.name}</Item>
-          : <Item key={key} style={props}>{item.name}</Item>)}
+        ? <Item key={key}>{item.name}</Item>
+        : <Item key={key} style={props}>{item.name}</Item>)}
   </Box>;
 };
 

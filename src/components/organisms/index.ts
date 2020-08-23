@@ -1,3 +1,3 @@
-export * from './room'
-export * from './ComingSoon'
-export * from './NotFound'
+export * from "./room";
+export * from "./ComingSoon";
+export * from "./NotFound";

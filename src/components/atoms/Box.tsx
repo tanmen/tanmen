@@ -1,11 +1,10 @@
-import { FC } from "react";
 import styled from "@emotion/styled";
-import React from "react";
+import React, { FC } from "react";
 
-export const Box : FC = ({children}) =>
+export const Box: FC = ({ children }) =>
   <Style>
     {children}
-  </Style>
+  </Style>;
 
 const Style = styled.div`
 background-color: #343a40;

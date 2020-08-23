@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 import React, { FC } from "react";
 import { DesignProps } from "../../../types/props";
-import { StyledContent } from "../molecules";
-import {HeaderStyle, FooterStyle} from '../molecules'
+import { FooterStyle, HeaderStyle, StyledContent } from "../molecules";
 
 export const Stretch: FC<DesignProps> = ({ className, children }) =>
   <Style className={className}>

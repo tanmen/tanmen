@@ -35,8 +35,8 @@ export const Header: FC<HeaderProps> = ({ direction }) => {
 };
 
 export const HeaderStyle = {
-  height: '50px'
-}
+  height: "50px"
+};
 
 const Box = styled.header`
 display: flex;
