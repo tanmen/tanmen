@@ -40,11 +40,10 @@ to {
 
 const nameStyles = css`
 position: absolute;
-width: inherit;
 font-size: .8em;
 top: -35px;
-left: 18px;
-color: #b3b3b3;
+left: 30px;
+color: #6d6d6d;
 text-decoration: none;
 transform: rotate(30deg) skewX(30deg);
 animation: ${anime} 200ms;

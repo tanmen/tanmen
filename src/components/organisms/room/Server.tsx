@@ -28,23 +28,22 @@ export const Server: FC = () => {
 
 const anime = keyframes`
 from {
-  top: 40px;
+  top: 42px;
   opacity: 0;
 }
 
 to {
-  top: 50px;
+  top: 52px;
   opacity: 1;
 }
 `;
 
 const nameStyles = css`
 position: absolute;
-width: inherit;
 font-size: .8em;
-top: 50px;
-left: 25px;
-color: #b3b3b3;
+top: 52px;
+left: 35px;
+color: #6d6d6d;
 text-decoration: none;
 transform: rotate(30deg) skewX(30deg);
 animation: ${anime} 200ms;

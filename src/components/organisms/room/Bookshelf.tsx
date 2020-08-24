@@ -44,7 +44,7 @@ position: absolute;
 font-size: .8em;
 top: 56px;
 left: 100px;
-color: #b3b3b3;
+color: #6d6d6d;
 text-decoration: none;
 transform: rotate(-30deg) skewX(-30deg);
 animation: ${anime} 200ms;
