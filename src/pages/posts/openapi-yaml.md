@@ -42,14 +42,14 @@ paths:
 そして、上記のようなコンフリクトを解消するようなライブラリが、私が探した限りだと見つからず。
 問題解決する為に、yamlをコンフリクトせず管理するようなライブラリを作成しました。
 
-## OpenapiYaml
+## openapi-yaml
 ### 設計
 yamlをコンフリクトせずに、分割させるにはエンドポイントの追加や削除で`paths`直下のプロパティが変化しない事と、
 モデルの追加、削除で`components/schemas`配下が変化しない設計が必要になります。
 
 今回の設計では、それをディレクトリ構造で解決しています。
 
-以下のようなディレクトリ構造で`OpenapiYaml`を利用した場合
+以下のようなディレクトリ構造で`openapi-yaml`を利用した場合
 
 ```plantuml
 @startmindmap
@@ -80,7 +80,7 @@ components:
 ```
 
 ### SourceCode
-OpenapiYamlは以下のRepositoryにあげてあります。
+`openapi-yaml`は以下のRepositoryにあげてあります。
 
 https://github.com/tanmen/openapi-yaml
 
