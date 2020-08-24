@@ -42,7 +42,7 @@ const nameStyles = css`
 position: absolute;
 font-size: .8em;
 top: 52px;
-left: 35px;
+left: 32px;
 color: #6d6d6d;
 text-decoration: none;
 transform: rotate(30deg) skewX(30deg);
