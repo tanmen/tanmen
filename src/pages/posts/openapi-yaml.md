@@ -2,7 +2,7 @@
 title: Openapiファイルをディレクトリ構造で管理する
 createdMonthAt: 2020-08
 createdAt: 2020-08-17
-updatedAt: 2020-08-23
+updatedAt: 2020-08-24
 tags: [Node, Openapi, Tool]
 ---
 Openapiは便利ですよね。
