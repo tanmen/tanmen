@@ -1,3 +1,11 @@
+type Post = {
+  title: string
+  createdAt: Date
+  updatedAt: Date
+  tags: string[]
+  html: string
+}
+
 type PostPick = {
   title: string
   createdAt: Date

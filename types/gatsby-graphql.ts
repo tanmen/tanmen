@@ -2976,7 +2976,10 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { markdownRemark?: Maybe<Pick<MarkdownRemark, 'html'>>, allMarkdownRemark: { dates: Array<(
+export type PostQuery = { markdownRemark?: Maybe<(
+    Pick<MarkdownRemark, 'html'>
+    & { frontmatter?: Maybe<Pick<MarkdownRemarkFrontmatter, 'title' | 'createdAt' | 'updatedAt' | 'tags'>> }
+  )>, allMarkdownRemark: { dates: Array<(
       Pick<MarkdownRemarkGroupConnection, 'fieldValue' | 'totalCount'>
       & { edges: Array<PostPickFragment> }
     )>, tags: Array<(
