@@ -1,6 +1,6 @@
 # Tanmen
 
-Hey! Welcome to my page.
+Hi! Welcome to my page.
 
 I am a lover of OSS activities and creating tools for my hobby.
 
