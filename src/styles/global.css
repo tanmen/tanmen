@@ -547,6 +547,11 @@
   height: 100%;
   object-fit: fill;
   image-rendering: pixelated;
+  transition: filter 0.25s ease;
+}
+/* spotlight: dim the whole room while a node is focused so the active one pops */
+.game-screen[data-focus="true"] .room-frame {
+  filter: brightness(0.45) saturate(0.72);
 }
 /* interactive hotspot over an object in the art */
 .spot {
@@ -575,16 +580,49 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 11px;
-  height: 11px;
-  border: 1px solid currentColor;
-  background: color-mix(in oklab, currentColor 28%, transparent);
-  box-shadow: 0 0 12px currentColor;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  background: radial-gradient(currentColor 0 30%, transparent 36%);
+  box-shadow:
+    0 0 9px currentColor,
+    0 0 0 4px rgba(0, 0, 0, 0.45);
   animation: markpulse 1.7s ease-in-out infinite;
 }
 .spot:hover .spot-mark,
 .spot:focus-visible .spot-mark {
   opacity: 0;
+}
+/* dim the other markers when one node is focused */
+.game-screen[data-focus="true"] .spot:not(:hover):not(:focus-visible) .spot-mark {
+  opacity: 0.16;
+}
+/* white HUD corner-reticle on the focused node — reads as "selected", not room neon */
+.spot-reticle {
+  position: absolute;
+  inset: -8px;
+  border: 2px solid #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.14s ease;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.55),
+    0 0 26px color-mix(in oklab, currentColor 75%, transparent);
+  -webkit-mask:
+    linear-gradient(#000 0 0) top left / 16px 16px no-repeat,
+    linear-gradient(#000 0 0) top right / 16px 16px no-repeat,
+    linear-gradient(#000 0 0) bottom left / 16px 16px no-repeat,
+    linear-gradient(#000 0 0) bottom right / 16px 16px no-repeat;
+  mask:
+    linear-gradient(#000 0 0) top left / 16px 16px no-repeat,
+    linear-gradient(#000 0 0) top right / 16px 16px no-repeat,
+    linear-gradient(#000 0 0) bottom left / 16px 16px no-repeat,
+    linear-gradient(#000 0 0) bottom right / 16px 16px no-repeat;
+}
+.spot:hover .spot-reticle,
+.spot:focus-visible .spot-reticle {
+  opacity: 1;
 }
 @keyframes markpulse {
   0%,
@@ -604,18 +642,34 @@
   transform: translateX(-50%);
   white-space: nowrap;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.12em;
   color: #fff;
-  padding: 0.25em 0.55em;
-  background: rgba(4, 5, 10, 0.8);
+  padding: 0.3em 0.6em;
+  background: rgba(4, 5, 10, 0.88);
   border: 1px solid currentColor;
-  box-shadow: 0 0 16px color-mix(in oklab, currentColor 40%, transparent);
+  box-shadow: 0 0 18px color-mix(in oklab, currentColor 50%, transparent);
   opacity: 0;
   transition: opacity 0.12s;
   pointer-events: none;
+  z-index: 4;
 }
 .spot:hover .spot-label,
 .spot:focus-visible .spot-label {
   opacity: 1;
+}
+/* per-object active animation overlay (plays on hover/focus when assets exist) */
+.spot-active {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.spot-active-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 6px color-mix(in oklab, currentColor 55%, transparent));
 }

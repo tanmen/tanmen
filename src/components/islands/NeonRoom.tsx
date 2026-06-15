@@ -21,11 +21,11 @@ type Spot = {
  * 座標(x,y,w,h は画面%)はアートに合わせて調整する。docs/room-sprite-spec.md 参照。
  */
 const SPOTS: Spot[] = [
-  { id: 'desk', tag: 'DESK', sub: 'profile', href: '/profile', color: '#2ee6ff', x: 77, y: 43, w: 14, h: 18, log: '/dev/desk :: 開発中… compiling reality' },
-  { id: 'shelf', tag: 'BOOKSHELF', sub: 'blog', href: '/posts', color: '#7b5cff', x: 26, y: 38, w: 18, h: 30, log: '/var/books :: 読書中… paging memory' },
-  { id: 'server', tag: 'SERVER', sub: 'services', href: '/services', color: '#ff2e88', x: 35, y: 59, w: 12, h: 15, log: '/srv :: ERR thermal — venting smoke', warn: true },
-  { id: 'toolbox', tag: 'TOOLBOX', sub: 'tools', href: '/tools', color: '#2ee6ff', x: 75, y: 58, w: 12, h: 15, log: '/opt/tools :: spanner.exe ready' },
-  { id: 'mail', tag: 'MAIL', sub: 'contact', href: '/contact', color: '#7b5cff', x: 43, y: 31, w: 9, h: 17, log: '/var/mail :: 1 unread — ping' },
+  { id: 'desk', tag: 'DESK', sub: 'profile', href: '/profile', color: '#2ee6ff', x: 78, y: 43, w: 11, h: 16, log: '/dev/desk :: 開発中… compiling reality' },
+  { id: 'shelf', tag: 'BOOKSHELF', sub: 'blog', href: '/posts', color: '#7b5cff', x: 27, y: 38, w: 26, h: 44, log: '/var/books :: 読書中… paging memory' },
+  { id: 'server', tag: 'SERVER', sub: 'services', href: '/services', color: '#ff2e88', x: 34, y: 64, w: 12, h: 18, log: '/srv :: ERR thermal — venting smoke', warn: true },
+  { id: 'toolbox', tag: 'TOOLBOX', sub: 'tools', href: '/tools', color: '#2ee6ff', x: 68, y: 65, w: 13, h: 18, log: '/opt/tools :: spanner.exe ready' },
+  { id: 'mail', tag: 'MAIL', sub: 'contact', href: '/contact', color: '#7b5cff', x: 43, y: 33, w: 10, h: 30, log: '/var/mail :: 1 unread — ping' },
 ];
 
 const FRAMES = [
@@ -49,18 +49,39 @@ const BOOT: { txt: string; cls?: string }[] = [
 const reduced = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// 侵入イントロは初回訪問のみ。2回目以降は localStorage フラグで即・部屋表示にする。
+const VISITED_KEY = 'tanmen:room-visited';
+const hasVisited = () => {
+  try {
+    return localStorage.getItem(VISITED_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
+const markVisited = () => {
+  try {
+    localStorage.setItem(VISITED_KEY, '1');
+  } catch {
+    // localStorage 不可（プライベートモード等）— その場合は毎回イントロでよい
+  }
+};
+
 export default function NeonRoom() {
   const [shown, setShown] = useState<string[]>(() => BOOT.map(() => ''));
   const [phase, setPhase] = useState<'boot' | 'live'>('boot');
   const [frame, setFrame] = useState(0);
   const [active, setActive] = useState<Spot | null>(null);
   const [entering, setEntering] = useState(false);
+  // per-object active overlays load from /room/active/<id>-active-f0N.png when present;
+  // if the asset 404s we mark it unavailable and fall back to the glow highlight only.
+  const [unavail, setUnavail] = useState<Record<string, boolean>>({});
 
   // boot / cracking sequence — types each line to completion, cancels cleanly
   useEffect(() => {
-    if (reduced()) {
+    if (reduced() || hasVisited()) {
       setShown(BOOT.map((b) => b.txt));
       setPhase('live');
+      markVisited();
       return;
     }
     let cancelled = false;
@@ -91,7 +112,10 @@ export default function NeonRoom() {
       }
       if (cancelled) return;
       await sleep(550);
-      if (!cancelled) setPhase('live');
+      if (!cancelled) {
+        markVisited();
+        setPhase('live');
+      }
     })();
 
     return () => {
@@ -128,7 +152,7 @@ export default function NeonRoom() {
         <span style={{ marginLeft: 'auto' }}>{phase === 'live' ? 'ROOM ONLINE' : 'BREACHING…'}</span>
       </div>
 
-      <div className="game-screen">
+      <div className="game-screen" data-focus={active ? 'true' : undefined}>
         <div className="room-art" data-on={phase === 'live'}>
           {FRAMES.map((src, i) => (
             <img key={src} src={src} alt="" aria-hidden="true" className="room-frame" style={{ opacity: frame === i ? 1 : 0 }} />
@@ -149,7 +173,22 @@ export default function NeonRoom() {
                 onClick={(e) => enter(s, e)}
               >
                 <span className="spot-mark" />
+                <span className="spot-reticle" aria-hidden="true" />
                 <span className="spot-label">{s.tag} · {s.sub}</span>
+                {active?.id === s.id && !unavail[s.id] && (
+                  <span className="spot-active" aria-hidden="true">
+                    {FRAMES.map((_, i) => (
+                      <img
+                        key={i}
+                        src={`/room/active/${s.id}-active-f0${i + 1}.png`}
+                        alt=""
+                        className="spot-active-frame"
+                        style={{ opacity: frame === i ? 1 : 0 }}
+                        onError={() => setUnavail((u) => ({ ...u, [s.id]: true }))}
+                      />
+                    ))}
+                  </span>
+                )}
               </a>
             ))}
         </div>
