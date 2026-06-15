@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../site.config';
+---
+
+<BaseLayout title="Contact" description="連絡先">
+  <h1 class="mb-6 text-2xl font-bold">Contact</h1>
+  <ul class="space-y-2">
+    <li>
+      <a class="text-accent hover:underline" href={`https://github.com/${SITE.social.github}`}>GitHub: @{SITE.social.github}</a>
+    </li>
+    <li>
+      <a class="text-accent hover:underline" href={`https://twitter.com/${SITE.social.twitter}`}>X: @{SITE.social.twitter}</a>
+    </li>
+    <li>
+      <a class="text-accent hover:underline" href={`https://qiita.com/${SITE.social.qiita}`}>Qiita: @{SITE.social.qiita}</a>
+    </li>
+  </ul>
+</BaseLayout>

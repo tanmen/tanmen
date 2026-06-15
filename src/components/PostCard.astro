@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { title, pubDate, tags } = post.data;
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<a
+  href={`/posts/${post.id}`}
+  class="block rounded-lg border border-white/10 bg-surface p-5 transition hover:border-white/25"
+>
+  <p class="text-xs text-muted"><time datetime={fmt(pubDate)}>{fmt(pubDate)}</time></p>
+  <h2 class="mt-1 text-lg font-semibold">{title}</h2>
+  {tags.length > 0 && (
+    <div class="mt-2 flex flex-wrap gap-2 text-xs text-muted">
+      {tags.map((t) => <span>#{t}</span>)}
+    </div>
+  )}
+</a>

@@ -1,0 +1,16 @@
+---
+import { SITE } from '../site.config';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-white/10 text-muted">
+  <div class="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-2 px-5 py-6 text-sm">
+    <p>© {year} {SITE.author}</p>
+    <div class="flex gap-4">
+      <a href={`https://github.com/${SITE.social.github}`} class="hover:text-fg" rel="me">GitHub</a>
+      <a href={`https://twitter.com/${SITE.social.twitter}`} class="hover:text-fg" rel="me">X</a>
+      <a href={`https://qiita.com/${SITE.social.qiita}`} class="hover:text-fg" rel="me">Qiita</a>
+    </div>
+  </div>
+</footer>

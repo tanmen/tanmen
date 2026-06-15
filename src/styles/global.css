@@ -1,0 +1,27 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/*
+  Provisional design tokens.
+  最終的な配色 / タイポ / モーションは frontend-design フェーズで確定する。
+  ここは「器」であり、見た目の決定稿ではない。
+*/
+@theme {
+  --color-bg: #0e0f13;
+  --color-surface: #161922;
+  --color-fg: #e8eaf0;
+  --color-muted: #9aa1b2;
+  --color-accent: #5eead4;
+
+  --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, monospace;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}

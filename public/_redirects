@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects
+# 旧 Gatsby の日本語タイトル URL → 新しいファイル名 slug（best-effort の 301）
+# 非ASCII パスのマッチは環境依存のため、必要なら実トラフィックを見て調整する。
+/posts/ブログ始めました                                /posts/blog-started   301
+/posts/nodenv環境下のwebstormでyarnを使えるようにする   /posts/jetbrains-yarn 301
+/posts/Openapiファイルをディレクトリ構造で管理する        /posts/openapi-yaml   301
