@@ -51,7 +51,7 @@ tanmen.work を 2026 のモダン構成でゼロから作り直すための設�
 - パッケージマネージャ: **pnpm**（推奨。bun でも可）
 - Lint/Format: **Biome**（一体型・高速）or 従来の ESLint + Prettier
 - テスト: **Vitest**（ユニット）+ **Playwright**（e2e）。Jest は破棄
-- ランタイム: **Node 22 LTS**（CI/ローカルを統一）
+- ランタイム: **Node 24**（`.node-version` + mise で固定、CI も `node-version-file` で同期）
 
 ---
 
@@ -186,7 +186,7 @@ as-is で見つかった負債の解消も同時に行う:
 - [ ] GA 旧 UA → Cloudflare Web Analytics（計測復活）
 - [ ] 未配線 i18n（`src/i18n/*`）→ **ja 単独で再出発**（推奨）。en を後で足すなら Astro 組み込み i18n routing。要確認
 - [ ] `pages/index.tsx` の死にクエリ・starter 残骸は移行時に破棄
-- [ ] CI/ローカルの Node を 22 LTS に統一
+- [x] CI/ローカルの Node を統一 → **Node 24**（`.node-version` + mise / CI は `node-version-file`）
 - [ ] `comparetors`（スペルミス）→ `comparators` に修正、または不要なら破棄
 - [ ] AdSense の存続を判断（推奨: 外す）
 
@@ -225,11 +225,20 @@ as-is で見つかった負債の解消も同時に行う:
 - **Tailwind v4 は Vite プラグインではなく PostCSS 経由**にした。`@tailwindcss/vite` が Astro 6 同梱の rolldown-vite と非互換（`tsconfigPaths` エラー）だったため、`@tailwindcss/postcss` + `postcss.config.mjs` に変更。将来 Vite プラグインが追従したら戻してよい。
 - `getStaticPaths` 内で使うヘルパーは frontmatter 直書きだと別チャンク化で参照不能 → `getStaticPaths` 内に定義。
 
+デザイン適用済み（frontend-design）:
+- コンセプト **「深夜のプログラマー部屋 / Late-night terminal room」**（CRT × cozy-retro、部屋アニメと調和）
+- 二灯のカラー: 暖色アンバー `#f3a64a`（ランプ/CTA）+ フォスファー・ミント `#6fe7b4`（画面/リンク）、warm-dark 背景
+- タイポ: DotGothic16（ドット/ディスプレイ）+ IBM Plex Sans JP（本文）+ IBM Plex Mono（コード）
+- 質感: スキャンライン + グレイン + ビネット、ピクセル風ハードシャドウ、シャープな角
+- ヘッダー=ターミナルプロンプト、一覧=`ls`/`grep` 風、記事=`##` マーカー付き prose、Room=CRTモニタ枠、404=kernel panic
+- 演出は `prefers-reduced-motion` を尊重。token は `src/styles/global.css` の `@theme`
+
+パッケージ管理: **pnpm**（`pnpm-lock.yaml` / `allowBuilds` で sharp・esbuild 承認）、Node は `.node-version` 24。
+
 未実装（後工程）:
-- 本デザイン（tone/type/color/motion）→ `frontend-design` skill
-- 「部屋」探索アニメの本実装 → 別PCの ComfyUI 成果物を `Room.tsx` に差し込み
+- 「部屋」探索アニメの本実装 → 別PCの ComfyUI 成果物を `Room.tsx` の screen 枠に差し込み
 - PlantUML 図 / コードタイトル（旧 remark プラグイン相当）は現状プレーンな code block に退避
-- i18n（ja/en）/ 解析（Cloudflare Web Analytics 埋め込み）/ 旧 npm 依存の脆弱性監査
+- i18n（ja/en）/ 解析（Cloudflare Web Analytics 埋め込み）
 
 ---
 
