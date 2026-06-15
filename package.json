@@ -5,6 +5,7 @@
   "private": true,
   "description": "tanmen.work — 怠惰なプログラマーのサイト (Astro reborn)",
   "license": "0BSD",
+  "packageManager": "pnpm@11.1.2",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
