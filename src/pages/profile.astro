@@ -3,9 +3,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Profile" description="tanmen のプロフィール">
-  <h1 class="mb-6 text-2xl font-bold">Profile</h1>
-  <div class="prose prose-invert max-w-none">
-    <p>怠惰なプログラマー。フロントエンドエンジニア。OSS 活動と趣味の道具づくりが好き。</p>
-    <p class="text-sm text-muted">※ このページは再構築中です。内容とデザインは frontend-design フェーズで確定します。</p>
+  <header class="mb-8">
+    <p class="font-mono text-xs text-faint">~/profile</p>
+    <h1 class="mt-1 text-2xl text-fg">Profile</h1>
+  </header>
+  <div class="prose prose-invert article max-w-none">
+    <p>
+      怠惰なプログラマー。バックエンドエンジニアとして入社し、いつのまにかフロントエンドの比率が高くなって、
+      今はフロントエンドエンジニアを名乗っています。
+    </p>
+    <p>
+      OSS 活動と、趣味の道具づくりが好きです。新しい技術を触った所感や、作ったツールのことを、
+      この部屋から少しずつ書いています。
+    </p>
   </div>
+  <p class="mt-8 font-mono text-xs text-faint">※ プロフィールは追って更新します。</p>
 </BaseLayout>

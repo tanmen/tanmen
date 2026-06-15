@@ -12,13 +12,16 @@ const fmt = (d: Date) => d.toISOString().slice(0, 10);
 
 <a
   href={`/posts/${post.id}`}
-  class="block rounded-lg border border-white/10 bg-surface p-5 transition hover:border-white/25"
+  class="row group flex flex-col gap-1 px-4 py-3.5 sm:flex-row sm:items-baseline sm:gap-4"
 >
-  <p class="text-xs text-muted"><time datetime={fmt(pubDate)}>{fmt(pubDate)}</time></p>
-  <h2 class="mt-1 text-lg font-semibold">{title}</h2>
+  <time datetime={fmt(pubDate)} class="shrink-0 font-mono text-xs text-faint">{fmt(pubDate)}</time>
+  <span class="min-w-0 flex-1">
+    <span class="font-mono text-sm text-phosphor opacity-50 transition-opacity group-hover:opacity-100">❯ </span>
+    <span class="text-fg transition-colors group-hover:text-amber">{title}</span>
+  </span>
   {tags.length > 0 && (
-    <div class="mt-2 flex flex-wrap gap-2 text-xs text-muted">
+    <span class="hidden shrink-0 gap-2 font-mono text-[0.65rem] text-faint sm:flex">
       {tags.map((t) => <span>#{t}</span>)}
-    </div>
+    </span>
   )}
 </a>

@@ -1,31 +1,13 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
-import TypeScene from '../components/islands/TypeScene.tsx';
-import Room from '../components/islands/Room.tsx';
-import { SITE } from '../site.config';
-
-const recent = (await getCollection('posts', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 3);
+import NeonRoom from '../components/islands/NeonRoom.tsx';
+import { NAV } from '../site.config';
 ---
 
-<BaseLayout>
-  <section class="mb-14">
-    <TypeScene client:idle text={SITE.description} />
-    <Room client:visible />
-  </section>
-
-  <section>
-    <div class="mb-4 flex items-center justify-between">
-      <h2 class="text-xl font-bold">Recent posts</h2>
-      <a href="/posts" class="text-sm text-muted hover:text-fg">View all →</a>
-    </div>
-    <ul class="space-y-4">
-      {recent.map((post) => (
-        <li><PostCard post={post} /></li>
-      ))}
-    </ul>
-  </section>
+<BaseLayout fullscreen>
+  <h1 class="sr-only">Tanmen — 怠惰なプログラマーの部屋 / 怠惰なプログラマーのサイト</h1>
+  <nav class="sr-only" aria-label="メニュー">
+    {NAV.map((n) => <a href={n.href}>{n.label}</a>)}
+  </nav>
+  <NeonRoom client:only="react" />
 </BaseLayout>

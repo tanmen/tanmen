@@ -8,10 +8,11 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title?: string;
   description?: string;
+  fullscreen?: boolean;
 }
 
-const { title, description = SITE.description } = Astro.props;
-const fullTitle = title ? `${title} | ${SITE.title}` : SITE.title;
+const { title, description = SITE.description, fullscreen = false } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE.title}` : `${SITE.title} — 怠惰なプログラマーのサイト`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -23,8 +24,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
     <link rel="canonical" href={canonical} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#05060a" />
     <meta property="og:site_name" content={SITE.title} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -33,11 +43,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
     <ClientRouter />
   </head>
-  <body class="flex min-h-dvh flex-col bg-bg text-fg antialiased">
-    <Header />
-    <main class="mx-auto w-full max-w-3xl flex-1 px-5 py-10">
+  <body class:list={['flex flex-col antialiased', fullscreen ? 'h-dvh overflow-hidden' : 'min-h-dvh']}>
+    {!fullscreen && <Header />}
+    <main class:list={[fullscreen ? 'min-h-0 flex-1' : 'mx-auto w-full max-w-3xl flex-1 px-5 py-12 md:py-16']}>
       <slot />
     </main>
-    <Footer />
+    {!fullscreen && <Footer />}
+
+    <div class="crt-scanlines" aria-hidden="true"></div>
+    <div class="crt-grain" aria-hidden="true"></div>
   </body>
 </html>

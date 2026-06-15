@@ -1,11 +1,27 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const tools = [
+  { name: 'openapi-yaml', desc: 'OpenAPI をディレクトリ構造で分割管理する', href: 'https://github.com/tanmen/openapi-yaml' },
+  { name: 'jetbrains-yarn', desc: 'JetBrains IDE で nodenv 配下の yarn を認識させる', href: 'https://github.com/tanmen/jetbrains-yarn' },
+];
 ---
 
 <BaseLayout title="Tools" description="作った道具たち">
-  <h1 class="mb-6 text-2xl font-bold">Tools</h1>
-  <div class="prose prose-invert max-w-none">
-    <p>趣味で作ったツールや OSS を並べる予定です。</p>
-    <p class="text-sm text-muted">※ このページは再構築中です。内容とデザインは frontend-design フェーズで確定します。</p>
+  <header class="mb-8">
+    <p class="font-mono text-xs text-faint">~/tools</p>
+    <h1 class="mt-1 text-2xl text-fg">Tools</h1>
+  </header>
+  <div class="panel [&>a:last-child]:border-b-0">
+    {tools.map((t) => (
+      <a href={t.href} class="row group flex flex-col gap-0.5 px-4 py-4">
+        <span class="font-mono text-sm">
+          <span class="text-phosphor opacity-60 group-hover:opacity-100">❯ </span>
+          <span class="text-fg group-hover:text-amber">{t.name}</span>
+        </span>
+        <span class="pl-5 text-sm text-muted">{t.desc}</span>
+      </a>
+    ))}
   </div>
+  <p class="mt-6 font-mono text-xs text-faint">※ 順次追加していきます。</p>
 </BaseLayout>

@@ -2,15 +2,24 @@
 import { SITE } from '../site.config';
 
 const year = new Date().getFullYear();
+const links = [
+  { label: 'github', href: `https://github.com/${SITE.social.github}` },
+  { label: 'x', href: `https://twitter.com/${SITE.social.twitter}` },
+  { label: 'qiita', href: `https://qiita.com/${SITE.social.qiita}` },
+];
 ---
 
-<footer class="border-t border-white/10 text-muted">
-  <div class="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-2 px-5 py-6 text-sm">
-    <p>© {year} {SITE.author}</p>
-    <div class="flex gap-4">
-      <a href={`https://github.com/${SITE.social.github}`} class="hover:text-fg" rel="me">GitHub</a>
-      <a href={`https://twitter.com/${SITE.social.twitter}`} class="hover:text-fg" rel="me">X</a>
-      <a href={`https://qiita.com/${SITE.social.qiita}`} class="hover:text-fg" rel="me">Qiita</a>
+<footer class="border-t border-line">
+  <div
+    class="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3 px-5 py-6 font-mono text-xs text-muted"
+  >
+    <p>© {year} {SITE.author} — built in a dark room</p>
+    <div class="flex gap-2">
+      {links.map((l) => (
+        <a href={l.href} class="link-p border border-line px-2 py-1 hover:border-phosphor/45" rel="me">
+          [{l.label}]
+        </a>
+      ))}
     </div>
   </div>
 </footer>

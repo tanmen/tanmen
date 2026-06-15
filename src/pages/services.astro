@@ -3,9 +3,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Services" description="提供しているもの">
-  <h1 class="mb-6 text-2xl font-bold">Services</h1>
-  <div class="prose prose-invert max-w-none">
-    <p>準備中です。</p>
-    <p class="text-sm text-muted">※ このページは再構築中です。内容とデザインは frontend-design フェーズで確定します。</p>
+  <header class="mb-8">
+    <p class="font-mono text-xs text-faint">~/services</p>
+    <h1 class="mt-1 text-2xl text-fg">Services</h1>
+  </header>
+  <div class="panel p-6 font-mono text-sm sm:p-8">
+    <p class="text-muted"><span class="text-phosphor">$</span> systemctl status services</p>
+    <p class="mt-2 text-amber">● services — <span class="text-faint">inactive (準備中)</span></p>
+    <p class="mt-4 text-faint">提供できるものが整い次第、ここに並べます。</p>
   </div>
 </BaseLayout>

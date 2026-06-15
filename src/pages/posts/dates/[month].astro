@@ -22,10 +22,14 @@ const { month, posts } = Astro.props;
 ---
 
 <BaseLayout title={month} description={`${month} の記事一覧`}>
-  <h1 class="mb-8 text-2xl font-bold">{month}</h1>
-  <ul class="space-y-4">
-    {posts.map((post) => (
-      <li><PostCard post={post} /></li>
-    ))}
-  </ul>
+  <header class="mb-6">
+    <p class="font-mono text-xs text-faint">~/posts/dates</p>
+    <h1 class="mt-1 font-mono text-lg text-fg">
+      <span class="text-phosphor">$</span> ls ~/posts/<span class="text-amber">{month}</span>
+      <span class="text-faint">— {posts.length} entries</span>
+    </h1>
+  </header>
+  <div class="panel [&>a:last-child]:border-b-0">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
 </BaseLayout>
