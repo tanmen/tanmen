@@ -9,17 +9,24 @@ const links = [
 ];
 ---
 
-<BaseLayout title="Contact" description="連絡先">
+<BaseLayout title="Contact" description="tanmen への連絡先（GitHub / X / Qiita）">
   <header class="mb-8">
     <p class="font-mono text-xs text-faint">~/contact</p>
     <h1 class="mt-1 text-2xl text-fg">Contact</h1>
   </header>
+
+  <p class="mb-6 text-muted">OSS・ツール・技術の話など、お気軽にどうぞ。以下のどこからでも。</p>
+
   <div class="panel [&>a:last-child]:border-b-0">
     {links.map((l) => (
-      <a href={l.href} class="row group flex items-baseline gap-4 px-4 py-4 font-mono text-sm" rel="me">
+      <a
+        href={l.href}
+        class="row group flex items-baseline gap-4 px-4 py-4 font-mono text-sm"
+        rel="me"
+      >
         <span class="w-16 shrink-0 text-faint">{l.label}</span>
-        <span class="text-phosphor opacity-60 group-hover:opacity-100">❯</span>
-        <span class="text-fg group-hover:text-amber">@{l.handle}</span>
+        <span class="text-phosphor opacity-60 transition-opacity group-hover:opacity-100">❯</span>
+        <span class="text-fg transition-colors group-hover:text-amber">@{l.handle}</span>
       </a>
     ))}
   </div>

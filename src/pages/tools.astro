@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../site.config';
 
 const tools = [
   { name: 'openapi-yaml', desc: 'OpenAPI をディレクトリ構造で分割管理する', href: 'https://github.com/tanmen/openapi-yaml' },
@@ -7,21 +8,27 @@ const tools = [
 ];
 ---
 
-<BaseLayout title="Tools" description="作った道具たち">
+<BaseLayout title="Tools" description="tanmen が作った OSS / ツール">
   <header class="mb-8">
     <p class="font-mono text-xs text-faint">~/tools</p>
     <h1 class="mt-1 text-2xl text-fg">Tools</h1>
   </header>
+
+  <p class="mb-6 text-muted">「面倒」を埋めるために作った OSS / 小物たち。</p>
+
   <div class="panel [&>a:last-child]:border-b-0">
     {tools.map((t) => (
       <a href={t.href} class="row group flex flex-col gap-0.5 px-4 py-4">
         <span class="font-mono text-sm">
-          <span class="text-phosphor opacity-60 group-hover:opacity-100">❯ </span>
-          <span class="text-fg group-hover:text-amber">{t.name}</span>
+          <span class="text-phosphor opacity-60 transition-opacity group-hover:opacity-100">❯ </span>
+          <span class="text-fg transition-colors group-hover:text-amber">{t.name}</span>
         </span>
         <span class="pl-5 text-sm text-muted">{t.desc}</span>
       </a>
     ))}
   </div>
-  <p class="mt-6 font-mono text-xs text-faint">※ 順次追加していきます。</p>
+
+  <p class="mt-6 font-mono text-xs text-faint">
+    ほかは <a href={`https://github.com/${SITE.social.github}`} class="link-p">github.com/{SITE.social.github}</a> に。
+  </p>
 </BaseLayout>

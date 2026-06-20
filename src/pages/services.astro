@@ -2,14 +2,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Services" description="提供しているもの">
+<BaseLayout title="Services" description="フロントエンド・OSS / ツール開発まわりの相談（メニューは準備中）">
   <header class="mb-8">
     <p class="font-mono text-xs text-faint">~/services</p>
     <h1 class="mt-1 text-2xl text-fg">Services</h1>
   </header>
-  <div class="panel p-6 font-mono text-sm sm:p-8">
+
+  <div class="panel p-6 font-mono text-sm leading-relaxed sm:p-8">
     <p class="text-muted"><span class="text-phosphor">$</span> systemctl status services</p>
-    <p class="mt-2 text-amber">● services — <span class="text-faint">inactive (準備中)</span></p>
-    <p class="mt-4 text-faint">提供できるものが整い次第、ここに並べます。</p>
+    <p class="mt-2"><span class="text-amber">●</span> services — <span class="text-faint">inactive（準備中）</span></p>
+    <p class="mt-4 text-muted">フロントエンド開発・OSS / ツール開発まわりの相談は受け付けています。</p>
+    <p class="mt-1 text-faint">
+      具体的なメニューは整い次第ここに。お話だけでも <a href="/contact" class="link-p">~/contact</a> へどうぞ。
+    </p>
   </div>
 </BaseLayout>
