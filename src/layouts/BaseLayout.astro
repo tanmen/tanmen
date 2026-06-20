@@ -41,6 +41,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content={new URL('/og.png', Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:image" content={new URL('/og.png', Astro.site)} />
     <ClientRouter />
   </head>
   <body class:list={['flex flex-col antialiased', fullscreen ? 'h-dvh overflow-hidden' : 'min-h-dvh']}>
