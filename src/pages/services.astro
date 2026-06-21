@@ -1,19 +1,77 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const services = [
+  { name: 'expires', desc: 'API Key / Token の失効を管理する台帳サービス', href: 'https://expires.live' },
+  { name: 'evalytics', desc: 'Google Meet を AI が講評する Chrome 拡張＋紹介サイト', href: 'https://evalytics.work' },
+  { name: 'travellers-rest-advisor', desc: "Traveller's Rest の酒場運営を支援するレシピ計算ツール", href: 'https://travellers-rest-advisor.pages.dev' },
+];
+
+const archived = [
+  { name: 'op-teemo', desc: 'Teamfight Tactics（LoL）のセット効果シミュレータ' },
+  { name: 'valotricks', desc: 'VALORANT の定点まとめサイト', href: 'https://valotricks.vercel.app' },
+  { name: 'nft-king', desc: 'NFT の収益管理サイト' },
+];
 ---
 
-<BaseLayout title="Services" description="フロントエンド・OSS / ツール開発まわりの相談（メニューは準備中）">
+<BaseLayout title="Services" description="tanmen が作って動かしている Web サービス / プロダクト">
   <header class="mb-8">
     <p class="font-mono text-xs text-faint">~/services</p>
     <h1 class="mt-1 text-2xl text-fg">Services</h1>
   </header>
 
-  <div class="panel p-6 font-mono text-sm leading-relaxed sm:p-8">
-    <p class="text-muted"><span class="text-phosphor">$</span> systemctl status services</p>
-    <p class="mt-2"><span class="text-amber">●</span> services — <span class="text-faint">inactive（準備中）</span></p>
-    <p class="mt-4 text-muted">フロントエンド開発・OSS / ツール開発まわりの相談は受け付けています。</p>
-    <p class="mt-1 text-faint">
-      具体的なメニューは整い次第ここに。お話だけでも <a href="/contact" class="link-p">~/contact</a> へどうぞ。
+  <p class="mb-6 text-muted">「面倒」を解くために作って動かしている Web サービスたち。</p>
+
+  <div class="panel [&>a:last-child]:border-b-0">
+    <p class="row px-4 py-3 font-mono text-xs text-muted">
+      <span class="text-phosphor">$</span> systemctl status services
     </p>
+    {services.map((s) => (
+      <a href={s.href} class="row group flex flex-col gap-0.5 px-4 py-4">
+        <span class="font-mono text-sm">
+          <span class="text-phosphor">●</span>
+          <span class="text-fg transition-colors group-hover:text-amber"> {s.name}</span>
+          <span class="text-faint"> — running</span>
+        </span>
+        <span class="pl-5 text-sm text-muted">{s.desc}</span>
+      </a>
+    ))}
   </div>
+
+  <div class="mt-10">
+    <p class="font-mono text-xs text-faint">~/services/archive</p>
+    <p class="mt-1 mb-4 text-sm text-muted">役目を終えて止めたもの。コードは残してあります。</p>
+
+    <div class="panel [&>*:last-child]:border-b-0">
+      <p class="row px-4 py-3 font-mono text-xs text-muted">
+        <span class="text-phosphor">$</span> systemctl list-units --state=inactive
+      </p>
+      {archived.map((s) => (
+        s.href ? (
+          <a href={s.href} class="row group flex flex-col gap-0.5 px-4 py-4">
+            <span class="font-mono text-sm">
+              <span class="text-faint">○</span>
+              <span class="text-muted transition-colors group-hover:text-amber"> {s.name}</span>
+              <span class="text-faint"> — stopped</span>
+            </span>
+            <span class="pl-5 text-sm text-muted">{s.desc}</span>
+          </a>
+        ) : (
+          <div class="row flex flex-col gap-0.5 px-4 py-4">
+            <span class="font-mono text-sm">
+              <span class="text-faint">○</span>
+              <span class="text-muted"> {s.name}</span>
+              <span class="text-faint"> — stopped</span>
+            </span>
+            <span class="pl-5 text-sm text-muted">{s.desc}</span>
+          </div>
+        )
+      ))}
+    </div>
+  </div>
+
+  <p class="mt-10 font-mono text-xs text-faint">
+    フロントエンド・OSS / ツール開発まわりの相談も受け付けています。お話だけでも
+    <a href="/contact" class="link-p">~/contact</a> へ。
+  </p>
 </BaseLayout>
