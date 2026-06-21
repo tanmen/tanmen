@@ -3,7 +3,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE } from '../site.config';
 
 const tools = [
+  { name: 'openapi-automatons', desc: 'OpenAPI から TypeScript のクライアント / サーバ / zod を生成するコード生成ツール群', href: 'https://github.com/openapi-automatons/openapi-automatons' },
   { name: 'openapi-yaml', desc: 'OpenAPI をディレクトリ構造で分割管理する', href: 'https://github.com/tanmen/openapi-yaml' },
+  { name: 'react-actors', desc: '非同期を意識した React 向け UI ライブラリ', href: 'https://tanmen.github.io/react-actors' },
+  { name: 'export-indexer', desc: 'ディレクトリの index ファイルを自動生成する', href: 'https://github.com/tanmen/export-indexer' },
+  { name: 'disassemble-package', desc: 'package.json に詰め込んだ設定を個別ファイルへ切り出す', href: 'https://github.com/tanmen/disassemble-package' },
+  { name: 'jest-reporter', desc: 'jest の結果を GitHub Actions の注釈として表示する', href: 'https://github.com/tanmen/jest-reporter' },
+  { name: 'update-nodejs', desc: 'GitHub Actions で Node.js のバージョンを更新する', href: 'https://github.com/tanmen/update-nodejs' },
   { name: 'jetbrains-yarn', desc: 'JetBrains IDE で nodenv 配下の yarn を認識させる', href: 'https://github.com/tanmen/jetbrains-yarn' },
 ];
 ---
