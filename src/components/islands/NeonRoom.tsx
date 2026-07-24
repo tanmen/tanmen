@@ -16,8 +16,8 @@ type Spot = {
 
 /**
  * 「部屋＝メニュー」全画面コンソール。
- * 部屋は public/room/room-f{1,2,3}.png を ~3.3fps でクロスサイクルして動かす
- * （ドット絵の 3 フレームループ）。各 .spot はアート内オブジェクトに重ねたナビ。
+ * 部屋は public/room/room-f01..06.png を ~6fps（160ms 間隔）でクロスサイクルして動かす
+ * （ドット絵の 6 フレームループ）。各 .spot はアート内オブジェクトに重ねたナビ。
  * 座標(x,y,w,h は画面%)はアートに合わせて調整する。docs/room-sprite-spec.md 参照。
  */
 const SPOTS: Spot[] = [
