@@ -1,245 +1,126 @@
-# リボーン後の目標アーキテクチャ（to-be）
+# Gatsby → Astro 移行記録（アーカイブ）
 
-tanmen.work を 2026 のモダン構成でゼロから作り直すための設計ドキュメント。
-現状（as-is）は ルートの `ARCHITECTURE.md` を参照。
+> **このドキュメントは履歴です。** 2026-06 に完了した Gatsby v2 → Astro 6 の刷新について、
+> 移行前の状態・設計判断・最終的にどう着地したかを記録している。
+> **現状（as-is）を知りたい場合はルートの `ARCHITECTURE.md` を見ること。**
 
-## 確定した土台
+---
+
+## 1. 移行前の状態（2026-06-15 / Gatsby v2）
+
+2020-08 に作成され、最終コミットは 2021-07。Gatsby 2.23 / React 16.12 / TypeScript 3.9 /
+Emotion 10 という、メジャー数世代遅れの構成だった。
+
+| 領域 | 移行前 |
+|---|---|
+| フレームワーク | Gatsby 2.23（`gatsby-config.js` / `gatsby-node.js` の `createPages`） |
+| UI | React 16.12 + Emotion 10（CSS-in-JS）、Atomic Design |
+| コンテンツ | `gatsby-transformer-remark` + GraphQL + `graphql-codegen` |
+| 演出 | react-spring 8 / gsap 3 / `gatsby-plugin-transition-link` |
+| 画像 | `gatsby-image` + sharp 系プラグイン |
+| ホスティング | GitHub Pages（`.github/workflows/publish.yml` → `gh-pages`、CNAME `tanmen.work`） |
+| CI の Node | 14（ローカルは 24 で乖離） |
+| テスト | Jest（`useType` フック 1 本のみ） |
+
+移行前に見つかっていた綻び:
+
+1. **GA が旧 UA 計測** — Universal Analytics は 2023 年に計測停止済みで、解析が事実上死んでいた。
+2. **i18n が未配線** — `src/i18n/index.ts` は 0 バイト、`ja.json` / `en.json` の参照ゼロのデッドコード。
+3. **`pages/index.tsx` の死にクエリ** — `graphql` クエリが export されておらず機能せず、中身も starter の残骸。
+4. **CI / ローカルの Node 乖離**（14 vs 24）。
+5. `src/templates/` と `src/components/templates/` の名前衝突、`utils/comparetors` のスペルミス。
+
+移行の動機: Gatsby は 2023 年の Netlify 買収後にメンテナンスモードへ移り、
+新規 SSG の主流が Astro / Next.js に移っていた。
+
+---
+
+## 2. 移行方針（当時の決定）
 
 | 項目 | 採用 |
 |---|---|
-| フレームワーク | **Astro 6**（コンテンツ主体・JS ゼロ送出。演出だけ island） |
-| インタラクティブ | **React 19 island**（演出部分のみ。`client:*` で局所ハイドレート） |
-| スタイル | **Tailwind v4**（Oxide エンジン / CSS-first の design token） |
-| ホスティング | **Cloudflare Pages**（帯域無制限・グローバル最速） |
-| 演出方針 | 「部屋（room）」は**概念ごと作り直し**（世界観は残し、実装は新規） |
+| フレームワーク | Astro 6（コンテンツ主体・JS ゼロ送出。演出だけ island） |
+| インタラクティブ | React 19 island（`client:*` で局所ハイドレート） |
+| スタイル | Tailwind v4（CSS-first の design token） |
+| ホスティング | Cloudflare Pages |
+| 演出方針 | 「部屋（room）」は概念ごと作り直し（世界観は残し、実装は新規） |
+| パッケージマネージャ | pnpm、Node 24（`.node-version`） |
 
-> 見た目のデザイン（tone / type / color / motion）自体は、このスタックが立ち上がった後に
-> `frontend-design` skill で別途やる。本書は**構造**を確定するもの。
+置き換えの対応表:
 
----
-
-## 1. 技術スタック詳細
-
-### コア
-- `astro` 6
-- `@astrojs/react` … 演出を React island として同居
-- `@astrojs/mdx` … 記事でコンポーネントを使えるように（任意。MD のままでも可）
-- `@astrojs/sitemap` … sitemap.xml 自動生成
-- `@astrojs/rss` … RSS フィード（ブログとして今風）
-
-### スタイル
-- `tailwindcss` v4 + `@tailwindcss/vite`（Astro 6 では Vite プラグイン経由が正。旧 `@astrojs/tailwind` は使わない）
-- design token は `@theme` ブロックで CSS-first 定義
-
-### コンテンツ処理
-- Markdown/MDX は Astro 組み込み（Rust 製プロセッサ）
-- シンタックスハイライトは **Shiki**（組み込み。prismjs は不要）
-- code title / 図表が必要なら remark/rehype プラグインで付与（現 code-titles / plantuml 相当）
-
-### 演出
-- `motion`（旧 Framer Motion）を React island 内で使用。必要なら GSAP も island 限定で
-- ページ遷移は Astro の **View Transitions（ClientRouter）**。現 `transition-link` を標準機能で置換
-
-### 画像
-- `astro:assets` の `<Image>`（sharp 内蔵）。現 `gatsby-image` を置換
-
-### 解析（推奨）
-- **Cloudflare Web Analytics**（Cookie 不要・無料・CF Pages と相性良）。旧 UA は破棄
-- AdSense は**外す前提**（個人サイトを軽く保つ）。収益化を続けるなら残せる → 要確認
-
-### 開発ツール
-- パッケージマネージャ: **pnpm**（推奨。bun でも可）
-- Lint/Format: **Biome**（一体型・高速）or 従来の ESLint + Prettier
-- テスト: **Vitest**（ユニット）+ **Playwright**（e2e）。Jest は破棄
-- ランタイム: **Node 24**（`.node-version` + mise で固定、CI も `node-version-file` で同期）
-
----
-
-## 2. ディレクトリ構成
-
-```
-astro.config.mjs
-src/
-├── content.config.ts        posts コレクション定義（Zod で frontmatter を型付け）
-├── content/
-│   └── posts/*.md(x)        記事本体（現 src/pages/posts/*.md を移設）
-├── pages/
-│   ├── index.astro          トップ（「部屋」island を埋め込む）
-│   ├── profile.astro / services.astro / tools.astro / contact.astro
-│   ├── 404.astro
-│   ├── posts/
-│   │   ├── index.astro      記事一覧
-│   │   ├── [...slug].astro   記事個別（getStaticPaths）
-│   │   ├── tags/[tag].astro  タグ別
-│   │   └── dates/[month].astro 月別
-│   └── rss.xml.ts           RSS フィード
-├── layouts/
-│   ├── BaseLayout.astro     <head>/SEO/ClientRouter/Analytics
-│   └── PostLayout.astro     記事用（目次・パンくず等）
-├── components/
-│   ├── *.astro              静的 UI（Header/Footer/PostCard…）— 大半はこちら
-│   └── islands/
-│       ├── Room.tsx         「部屋」インタラクト（client:visible）
-│       └── TypeScene.tsx    タイピング演出（client:idle）
-└── styles/
-    └── global.css           @import "tailwindcss"; + @theme トークン
-```
-
-ポイント:
-- Atomic Design は**維持可能だが軽くなる**。多くは island 不要の `.astro` 静的コンポーネントになる。
-- `src/templates/`（Gatsby のページテンプレ）と `components/templates/` の名前衝突は解消される（Astro は `pages/` のファイルがルート、`layouts/` がレイアウト）。
-
----
-
-## 3. コンテンツ層（GraphQL → Content Collections）
-
-現状の `gatsby-transformer-remark` + `graphql-codegen` + `gatsby-node.js createPages` は、
-**Content Collections v2 + `getStaticPaths`** に置き換わる。GraphQL もコード生成も不要。
-
-### content.config.ts（スケッチ）
-
-```ts
-import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
-
-const posts = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts' }),
-  schema: z.object({
-    title: z.string(),
-    pubDate: z.coerce.date(),        // 現 createdAt
-    updatedDate: z.coerce.date().optional(), // 現 updatedAt
-    tags: z.array(z.string()).default([]),
-    draft: z.boolean().default(false),
-  }),
-});
-
-export const collections = { posts };
-```
-
-frontmatter の整理:
-- `createdAt` → `pubDate` / `updatedAt` → `updatedDate`
-- `createdMonthAt` は**廃止**（`pubDate` から月を導出。月別ページもこれで生成）
-- `tags` はそのまま
-
-### ページ生成（現 createPages の置換）
-
-| 現 `gatsby-node.js` | Astro |
+| 移行前（Gatsby） | 移行後（Astro） |
 |---|---|
-| `posts/{title}` | `pages/posts/[...slug].astro` の `getStaticPaths`（slug は**ファイル名由来**）|
-| `posts/tags/{tag}` | `pages/posts/tags/[tag].astro`（`getCollection` でタグ集計）|
-| `posts/dates/{month}` | `pages/posts/dates/[month].astro`（`pubDate` で月集計）|
-
-```ts
-// posts/[...slug].astro 抜粋
-export async function getStaticPaths() {
-  const posts = await getCollection('posts', ({ data }) => !data.draft);
-  return posts.map(p => ({ params: { slug: p.id }, props: { post: p } }));
-}
-```
-
-> **URL の変化（要判断）**: 現状は `posts/{日本語タイトル}` を URL に使っている
-> （例 `/posts/ブログ始めました`）。新構成は**ファイル名 slug**（例 `/posts/blog-started`）。
-> 既存 3 記事のファイル名は ascii なので綺麗になるが、旧 URL とは変わる。
-> 被リンク/SEO を守るなら CF Pages 側で `_redirects` による 301 を用意する。
+| `gatsby-transformer-remark` + GraphQL + codegen | Content Collections v2 + Zod（`src/content.config.ts`） |
+| `gatsby-node.js` の `createPages` | `pages/**` の `getStaticPaths` |
+| `posts/{日本語タイトル}` | `posts/{ファイル名 slug}`（`_redirects` で 301） |
+| frontmatter `createdAt` / `updatedAt` / `createdMonthAt` | `pubDate` / `updatedDate`（月は `pubDate` から導出、`createdMonthAt` 廃止） |
+| Emotion（CSS-in-JS） | Tailwind v4 + `@theme` トークン |
+| prismjs | Shiki（Astro 組み込み） |
+| `gatsby-plugin-transition-link` | View Transitions（`ClientRouter`） |
+| `gatsby-image` | `astro:assets` の `<Image>` |
+| Jest | （未導入のまま。Vitest / Playwright は積み残し） |
+| GitHub Actions → gh-pages | Cloudflare Pages の Git 連携 |
 
 ---
 
-## 4. スタイル（Tailwind v4・CSS-first トークン）
+## 3. 設計からの差分（実装時の判断）
 
-```css
-/* src/styles/global.css */
-@import "tailwindcss";
+計画どおりに行かず、方針を変えた点。**ここが現状と食い違いやすいので注意。**
 
-@theme {
-  --color-bg:      /* ... */;
-  --color-fg:      /* ... */;
-  --color-accent:  /* ... */;
-  --font-sans:     /* ... */;
-  --font-mono:     /* ... */;
-}
-```
-
-- design token を `@theme` に集約 → ユーティリティと自動連動（`bg-bg` 等）。
-- 具体的な配色/タイポは `frontend-design` フェーズで決定（ここでは器だけ）。
-- 記事本文は `@tailwindcss/typography`（prose）+ 必要に応じ markdown.css の流用。
-
----
-
-## 5. デプロイ（Cloudflare Pages）
-
-静的出力（`astro build` → `dist/`）をそのまま CF Pages に載せる。**SSR アダプタは不要**。
-
-方式（どちらかを選択 → 要確認）:
-- **A. CF Pages の Git 連携**（推奨）: GitHub に push → CF が自動ビルド&配信。CI 自前不要。
-- **B. GitHub Actions + `wrangler pages deploy`**: 現行の GH Actions 流儀を維持したい場合。
-
-- カスタムドメイン `tanmen.work` を CF Pages 側へ移設（DNS を Cloudflare に）。
-- 環境変数（旧 `GOOGLE_*`）は廃止 or CF Pages の環境変数へ。
-- 旧 `peaceiris/actions-gh-pages` は撤去。
+- **Tailwind は Vite プラグインではなく PostCSS 経由にした。**
+  当初は `@tailwindcss/vite` を予定していたが、Astro 6 同梱の rolldown-vite と非互換
+  （`tsconfigPaths` エラー）だったため `@tailwindcss/postcss` + `postcss.config.mjs` に変更。
+  将来 Vite プラグインが追従したら戻してよい。
+- **解析は Cloudflare Web Analytics ではなく GA4 にした。**
+  当初は Cookie 不要の CF Web Analytics を推していたが、最終的に GA4 を採用
+  （`src/components/Analytics.astro`、`PUBLIC_GA_ID` があるときだけ出力）。
+- **デプロイは GitHub Actions ではなく CF Pages の Git 連携にした。**
+  移行中は `deploy.yml` を置いていたが、公開前の整理（`b99d443`）で撤去。
+  現在リポジトリに CI 設定は無く、ビルド設定は CF Pages 側にある。
+- **`getStaticPaths` 内のヘルパー** — frontmatter 直書きだと別チャンク化で参照不能になるため、
+  `getStaticPaths` 内に定義している。
+- **部屋のフレーム数は 3 → 6 に増えた**（`room-f01..f06.png`）。ホバー時の active オーバーレイも
+  オブジェクトごとに 6 フレーム。詳細は `room-sprite-spec.md`。
+- **AdSense は撤去**（個人サイトを軽く保つため）。
+- **i18n は ja 単独で再出発**。Gatsby 時代の未配線 i18n は破棄した。
 
 ---
 
-## 6. 残課題（移行作業のチェックリスト）
+## 4. デザイン適用（frontend-design フェーズ）
 
-as-is で見つかった負債の解消も同時に行う:
+構造が立ち上がった後、`frontend-design` でトーンを決めた。
 
-- [ ] GA 旧 UA → Cloudflare Web Analytics（計測復活）
-- [ ] 未配線 i18n（`src/i18n/*`）→ **ja 単独で再出発**（推奨）。en を後で足すなら Astro 組み込み i18n routing。要確認
-- [ ] `pages/index.tsx` の死にクエリ・starter 残骸は移行時に破棄
-- [x] CI/ローカルの Node を統一 → **Node 24**（`.node-version` + mise / CI は `node-version-file`）
-- [ ] `comparetors`（スペルミス）→ `comparators` に修正、または不要なら破棄
-- [ ] AdSense の存続を判断（推奨: 外す）
+途中、暖色アンバー + フォスファー・ミントの「深夜のプログラマー部屋（cozy-retro）」案を
+一度実装したが、最終的に**サイバーパンク寄りの「NEON ROOM」に振り直した**。
 
----
+確定したもの（現行）:
 
-## 7. 移行フェーズ案
+- カラー: near-black `#05060a` ベース + ネオン cyan `#2ee6ff` / magenta `#ff2e88` / violet `#7b5cff`
+- タイポ: Chakra Petch（見出し）/ IBM Plex Sans JP（本文）/ IBM Plex Mono（コード）
+- 質感: CRT スキャンライン + グレイン、ターミナル風のヘッダ・パンくず
+- トップは全画面の「部屋コンソール」。侵入イントロ → 部屋（`NeonRoom.tsx`）
 
-1. **足場作り**: 新規 Astro 6 プロジェクト初期化、Tailwind v4 / React / mdx / sitemap / rss 導入、Node 22 固定
-2. **コンテンツ移送**: `src/content/posts/` へ記事移設、frontmatter 整形、`content.config.ts` で型付け
-3. **ルーティング**: 記事/タグ別/月別ページを `getStaticPaths` で再現、RSS・sitemap
-4. **静的 UI**: Header/Footer/一覧/記事レイアウトを `.astro` で再構築（design は仮）
-5. **演出 island**: 「部屋」「タイピング」を新概念で React island として実装（frontend-design 連携）
-6. **デザイン適用**: `frontend-design` で tone/type/color/motion を決定し反映
-7. **デプロイ**: CF Pages 接続、独自ドメイン移設、旧 URL リダイレクト、解析確認
-8. **解体**: 旧 Gatsby 一式を撤去
+> cozy-retro 案の名残として、トークン名 `--color-phosphor` / `--color-amber` が残っている
+> （実際の値は cyan / magenta）。
 
 ---
 
----
+## 5. 移行時に完了したこと
 
-## 8. 実装状況（2026-06-15 / branch: `reborn/astro`）
+- [x] Astro 6 / React 19 / Tailwind 4 / TypeScript 6 で足場を作成
+- [x] 記事 3 本を `src/content/posts/` へ移送（frontmatter 整形）
+- [x] ルーティング再現（トップ / 一覧 / 個別 / タグ別 / 月別 / RSS / sitemap）
+- [x] 旧 URL からの 301（`public/_redirects`）
+- [x] GA 旧 UA → GA4（計測復活）
+- [x] Node を 24 に統一（`.node-version`）
+- [x] pnpm 化（`allowBuilds` で sharp・esbuild 承認）
+- [x] Cloudflare Pages へ移行、独自ドメイン `tanmen.work` を接続
+- [x] 旧 Gatsby 一式・GitHub Actions・AdSense を撤去
+- [x] 部屋アートの本実装（6 フレームループ + active オーバーレイ）
 
-足場〜ブログ移送〜ルーティング〜デプロイ設定まで実装し、`astro build` が通る状態。
-
-実装済み:
-- Astro 6.4.6 / React 19 island / Tailwind 4.3.1 / TypeScript 6 で初期化（Node 24 で build 確認）
-- 記事3本を `src/content/posts/` へ移送（`createdAt→pubDate` / `updatedAt→updatedDate` に整形、`createdMonthAt` 廃止）
-- Content Collections v2 + Zod 型付け（`content.config.ts`）
-- ルーティング: トップ / 記事一覧 / 記事個別(`[...slug]`) / タグ別 / 月別 / RSS / sitemap → **15 ページ生成**
-- レイアウト・ヘッダー・フッター・PostCard・design token の器（暫定ダークテーマ）
-- island プレースホルダ: `TypeScene`(タイピング) / `Room`(ComfyUI 成果物の差し込み口)
-- View Transitions（ClientRouter）/ Shiki ハイライト / prose(typography)
-- Cloudflare Pages 用 `public/_redirects` + GitHub Actions `deploy.yml`
-
-設計からの差分（実装上の判断）:
-- **Tailwind v4 は Vite プラグインではなく PostCSS 経由**にした。`@tailwindcss/vite` が Astro 6 同梱の rolldown-vite と非互換（`tsconfigPaths` エラー）だったため、`@tailwindcss/postcss` + `postcss.config.mjs` に変更。将来 Vite プラグインが追従したら戻してよい。
-- `getStaticPaths` 内で使うヘルパーは frontmatter 直書きだと別チャンク化で参照不能 → `getStaticPaths` 内に定義。
-
-デザイン適用済み（frontend-design）:
-- コンセプト **「深夜のプログラマー部屋 / Late-night terminal room」**（CRT × cozy-retro、部屋アニメと調和）
-- 二灯のカラー: 暖色アンバー `#f3a64a`（ランプ/CTA）+ フォスファー・ミント `#6fe7b4`（画面/リンク）、warm-dark 背景
-- タイポ: DotGothic16（ドット/ディスプレイ）+ IBM Plex Sans JP（本文）+ IBM Plex Mono（コード）
-- 質感: スキャンライン + グレイン + ビネット、ピクセル風ハードシャドウ、シャープな角
-- ヘッダー=ターミナルプロンプト、一覧=`ls`/`grep` 風、記事=`##` マーカー付き prose、Room=CRTモニタ枠、404=kernel panic
-- 演出は `prefers-reduced-motion` を尊重。token は `src/styles/global.css` の `@theme`
-
-パッケージ管理: **pnpm**（`pnpm-lock.yaml` / `allowBuilds` で sharp・esbuild 承認）、Node は `.node-version` 24。
-
-未実装（後工程）:
-- 「部屋」探索アニメの本実装 → 別PCの ComfyUI 成果物を `Room.tsx` の screen 枠に差し込み
-- PlantUML 図 / コードタイトル（旧 remark プラグイン相当）は現状プレーンな code block に退避
-- i18n（ja/en）/ 解析（Cloudflare Web Analytics 埋め込み）
+積み残しは `ARCHITECTURE.md` の「負債・積み残し」を参照。
 
 ---
 
-_作成: 2026-06-15 / 対象コミット: `05e6a79` / 実装ブランチ: `reborn/astro`_
+_移行実施: 2026-06 / 移行前コミット: `05e6a79` / 刷新コミット: `ba659ba`_
+_このドキュメントの最終更新: 2026-07-24_

@@ -5,7 +5,7 @@
   ─────────────────────────────────────────────────────────────
   tanmen.work — "NEON ROOM" / cyberpunk portfolio
   Dark cool base, neon cyan × magenta, bloom & reflections.
-  主役は React Three Fiber で組む「部屋＝3Dナビ」。
+  主役はドット絵の 6 フレームループで動かす「部屋＝ナビ」（islands/NeonRoom.tsx）。
   ─────────────────────────────────────────────────────────────
 */
 @theme {
